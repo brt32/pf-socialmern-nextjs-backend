@@ -12,8 +12,11 @@ import {
   unlikePost,
   addComment,
   removeComment,
+  totalPosts,
+  posts,
+  getPost,
 } from "../controllers/post";
-import { requireSignIn, canEditDeletePost } from "../middlewares";
+import { requireSignIn, canEditDeletePost, isAdmin } from "../middlewares";
 
 const router = express.Router();
 
@@ -34,12 +37,21 @@ router.delete(
   deletePost
 );
 
-router.get("/news-feed", requireSignIn, newsFeed);
+router.get("/news-feed/:page", requireSignIn, newsFeed);
 
 router.put("/like-post", requireSignIn, likePost);
 router.put("/unlike-post", requireSignIn, unlikePost);
 
 router.put("/add-comment", requireSignIn, addComment);
 router.put("/remove-comment", requireSignIn, removeComment);
+
+router.get("/total-posts", totalPosts);
+
+router.get("/posts", posts);
+
+router.get("/post/:_id", getPost);
+
+// admin
+router.delete("/admin/delete-post/:_id", requireSignIn, isAdmin, deletePost);
 
 module.exports = router;
